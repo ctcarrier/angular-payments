@@ -49,7 +49,7 @@ angular.module('angularPayments')
       var form = angular.element(elem);
 
       form.bind('submit', function() {
-        console.log("SUBMITTED: " + attr.doCharge);
+        console.log("SUBMITTED: " + attr);
         var doCharge = function() {
           if (attr.doCharge != null) {
             return angular.$eval(attr.doCharge);
