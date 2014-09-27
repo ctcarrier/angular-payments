@@ -49,40 +49,55 @@ angular.module('angularPayments')
 
       form.bind('submit', function() {
 
-        expMonthUsed = scope.expMonth ? true : false;
-        expYearUsed = scope.expYear ? true : false;
-
-        if(!(expMonthUsed && expYearUsed)){
-          exp = Common.parseExpiry(scope.expiry)
-          scope.expMonth = exp.month
-          scope.expYear = exp.year
+        var doCharge = function() {
+          if (attr.doCharge) {
+            return angular.$eval(attr.doCharge);
+          }
+          else {
+            return true;
+          }
         }
+        if (doCharge){
+          expMonthUsed = scope.expMonth ? true : false;
+          expYearUsed = scope.expYear ? true : false;
 
-        var button = form.find('button');
-        button.prop('disabled', true);
+          if(!(expMonthUsed && expYearUsed)){
+            exp = Common.parseExpiry(scope.expiry)
+            scope.expMonth = exp.month
+            scope.expYear = exp.year
+          }
 
-        if(form.hasClass('ng-valid')) {
-          
+          var button = form.find('button');
+          button.prop('disabled', true);
 
-          $window.Stripe.createToken(_getDataToSend(scope), function() {
-            var args = arguments;
+          if(form.hasClass('ng-valid')) {
+
+
+            $window.Stripe.createToken(_getDataToSend(scope), function() {
+              var args = arguments;
+              scope.$apply(function() {
+                scope[attr.stripeForm].apply(scope, args);
+              });
+              button.prop('disabled', false);
+
+            });
+
+          } else {
             scope.$apply(function() {
-              scope[attr.stripeForm].apply(scope, args);
+              scope[attr.stripeForm].apply(scope, [400, {error: 'Invalid form submitted.'}]);
             });
             button.prop('disabled', false);
+          }
 
-          });
-
-        } else {
-          scope.$apply(function() {
-            scope[attr.stripeForm].apply(scope, [400, {error: 'Invalid form submitted.'}]);
-          });
-          button.prop('disabled', false);
+          scope.expMonth = null;
+          scope.expYear  = null;
         }
-
-        scope.expMonth = null;
-        scope.expYear  = null;
-
+        else {
+          var args = arguments;
+          scope.$apply(function() {
+            scope[attr.stripeForm].apply(scope, args);
+          });
+        }
       });
     }
   }
