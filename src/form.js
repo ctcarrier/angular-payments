@@ -48,15 +48,16 @@ angular.module('angularPayments')
       var form = angular.element(elem);
 
       form.bind('submit', function() {
-
+        console.log("SUBMITTED!!!!!!!!!!!!!");
         var doCharge = function() {
-          if (attr.doCharge) {
+          if (attr.doCharge != null) {
             return angular.$eval(attr.doCharge);
           }
           else {
             return true;
           }
-        }
+        }();
+        console.log("DO CHARGE? " + doCharge);
         if (doCharge){
           expMonthUsed = scope.expMonth ? true : false;
           expYearUsed = scope.expYear ? true : false;
