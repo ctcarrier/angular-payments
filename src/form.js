@@ -53,7 +53,7 @@ angular.module('angularPayments')
         console.log(attr.docharge);
         var doCharge = function() {
           if (attr.docharge != null) {
-            return angular.$eval(attr.docharge);
+            return scope.$eval(attr.docharge);
           }
           else {
             return true;
