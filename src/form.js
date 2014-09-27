@@ -41,6 +41,7 @@ angular.module('angularPayments')
     restrict: 'A',
     link: function(scope, elem, attr) {
 
+      console.log("LINKING!!!!!!!!!!");
       if(!$window.Stripe){
           throw 'stripeForm requires that you have stripe.js installed. Include https://js.stripe.com/v2/ into your html.';
       }
