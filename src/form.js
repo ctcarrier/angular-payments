@@ -98,7 +98,7 @@ angular.module('angularPayments')
         else {
           var args = arguments;
           scope.$apply(function() {
-            scope[attr.stripeForm].apply(scope, args);
+            scope[attr.stripeForm].apply(scope, {});
           });
         }
       });
